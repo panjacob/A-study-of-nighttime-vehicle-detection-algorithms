@@ -1,0 +1,38 @@
+Running:
+    Yolov5
+    Yolov8
+
+
+
+
+Planned:
+    CenterNet Resnet50 V2 512x512
+
+    SSD ResNet101 V1 FPN 640x640 (RetinaNet101) - za duża
+    Faster R-CNN ResNet101 V1 640x640 - za duża??
+    SSD ResNet152 V1 FPN 640x640 (RetinaNet152) - narazie nie
+    SSD MobileNet V1 FPN 640x640 - wystarczy te co mam -ten
+    CenterNet Resnet50 V1 FPN 512x512 - chyba też wystarczy
+    Faster R-CNN Inception ResNet V2 640x640 - zmienić rozdzieloczosc, przyspieszyc?? | za wolna
+
+Done:
+    1SSD MobileNet V2 FPNLite 320x320                'my_ssd_mobnet_50', #zmiana
+    2SSD MobileNet V2 FPNLite 640x640                'ssd_mobilenet_v2_fpnlite_640px_b4_100',
+    3SSD MobileNet v2 320x320 - na 130k można jeszcze     'ssd_mobnet_v2_zwykly_320px_b8_100_lr1',
+
+
+    4SSD ResNet50 V1 FPN 640x640 (RetinaNet50) - OK         'ssd_resnet50_v1_fpn_640_b2_100_l2'
+
+    5EfficientDet D0 512x512            'efficentdet_d0_512_50_b8',
+    6EfficientDet D1 640x640 - trenowany był 16 godzin
+
+    7CenterNet MobileNetV2 FPN 512x512 - lr2            'centernet_hg104_512x512_coco17_tpu-8_100_b2',
+    8CenterNet HourGlass104 512x512 - 26 checkpoint najlepszy     'centernet_mobilenetv2fpn_512x512_coco17_od_test_lr2',
+    9Faster R-CNN ResNet50 V1 640x640 - zrobić 100, 50 to za krótko? mniejszy lr 0.02 lub 0.01 - ostatni najlepszy      'faster_rcnn_resnet50_v1_640x640_150',
+
+
+
+
+
+
+
