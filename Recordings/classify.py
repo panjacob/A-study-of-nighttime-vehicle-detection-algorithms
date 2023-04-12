@@ -19,7 +19,8 @@ model = YOLO(model_yolo8n)
 #     print(masks)
 #     print(probs)
 
-for video_name in video_list_files:
+for i, video_name in enumerate(video_list_files):
+    filename = video_name.split('.')[0]
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
     frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -37,28 +38,41 @@ for video_name in video_list_files:
         if not ret:
             continue
         success_count += 1
-        if success_count == frames_count:
+        if success_count == frames_count - 500:
             # if success_count == 2:
             break
         if success_count < 3000:
             continue
 
+        if success_count % 25:
+            continue
+
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)
+        frame = cv2.resize(frame, (640, 640))
+        # cv2.imwrite(os.path.join('frames', f"{i}_{success_count}.png"), frame,[cv2.IMWRITE_PNG_COMPRESSION, 9])
+        cv2.imwrite(os.path.join('frames', f"{i}_{success_count}.jpg"), frame)
+
+        # crop_img = frame[20:600, 0:800]
+        # frame = cv2.resize(frame, (640, 640))
+
         # results = model.predict(source=frame[:, :, ::-1])
-        result = model.predict(source=frame)
-        for x in result[0].boxes.xyxy:
-            y = x.numpy().astype(int)
-            print(y)
-            if 640 < y[0] < 700 and 320 < y[1] < 360 and 690 < y[2] < 740 and  330< y[3] < 370:
-                print('pomijam lampe')
-                continue
-            frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), (255, 0, 0), 2)
+        # result = model.predict(source=frame)
+        # for x in result[0].boxes.xyxy:
+        #     y = x.numpy().astype(int)
+        #     print(y)
+        #     if 640 < y[0] < 700 and 320 < y[1] < 360 and 690 < y[2] < 740 and 330 < y[3] < 370:
+        #         print('pomijam lampe')
+        #         continue
+        #
+        #     frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), (255, 0, 0), 2)
 
         # print(result[0].boxes)
 
         pbar.update(1)
-        cv2.imshow('Frame', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        # cv2.imshow('Frame', frame)
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
 
     # print(succ, fail)
     cap.release()
