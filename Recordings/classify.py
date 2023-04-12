@@ -7,8 +7,8 @@ from ultralytics import YOLO
 video_list_files = os.listdir('videos')
 print(video_list_files)
 
-model_yolo8n = os.path.join('..', 'yolov8', 'n50_50_100.onnx')
-model = YOLO(model_yolo8n)
+# model_yolo8n = os.path.join('..', 'yolov8', 'n50_50_100.onnx')
+# model = YOLO(model_yolo8n)
 # results = model.predict(source=)
 # print(results)
 # for result in results:
@@ -18,12 +18,13 @@ model = YOLO(model_yolo8n)
 #     print(boxes)
 #     print(masks)
 #     print(probs)
+i = 2
+for _, video_name in enumerate(video_list_files[i:]):
 
-for i, video_name in enumerate(video_list_files):
     filename = video_name.split('.')[0]
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
-    frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    frames_count = (cap.get(cv2.CAP_PROP_FRAME_COUNT) - 3500) / 25
     fps = cap.get(cv2.CAP_PROP_FPS)
     video_time = frames_count / fps
     frames_light_time = []
@@ -51,7 +52,6 @@ for i, video_name in enumerate(video_list_files):
         frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)
         frame = cv2.resize(frame, (640, 640))
         # cv2.imwrite(os.path.join('frames', f"{i}_{success_count}.png"), frame,[cv2.IMWRITE_PNG_COMPRESSION, 9])
-        cv2.imwrite(os.path.join('frames', f"{i}_{success_count}.jpg"), frame)
 
         # crop_img = frame[20:600, 0:800]
         # frame = cv2.resize(frame, (640, 640))
@@ -70,8 +70,25 @@ for i, video_name in enumerate(video_list_files):
         # print(result[0].boxes)
 
         pbar.update(1)
-        # cv2.imshow('Frame', frame)
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.imshow('Frame', frame)
+
+        key = cv2.waitKey(0)
+        if key == 32:
+            print('False')
+            cv2.imwrite(os.path.join('frames_classified', 'false', f"{i}_{success_count}.jpg"), frame)
+        if key == 13:
+            print('True')
+            cv2.imwrite(os.path.join('frames_classified', 'true', f"{i}_{success_count}.jpg"), frame)
+        if key == 8:
+            print('Skip')
+            continue
+        if key == ord('q'):
+            print('success_count: ', success_count)
+            break
+        # if cv2.waitKey(999999) & 0xFF == 13:
+        #     print('enter')
+        #     continue
+        # if cv2.waitKey(999999) & 0xFF == ord('q'):
         #     break
 
     # print(succ, fail)
