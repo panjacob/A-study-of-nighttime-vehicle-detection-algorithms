@@ -75,10 +75,10 @@ for _, video_name in enumerate(video_list_files[i:]):
         key = cv2.waitKey(0)
         if key == 32:
             print('False')
-            cv2.imwrite(os.path.join('frames_classified', 'false', f"{i}_{success_count}.jpg"), frame)
+            # cv2.imwrite(os.path.join('frames_classified', 'false', f"{i}_{success_count}.jpg"), frame)
         if key == 13:
             print('True')
-            cv2.imwrite(os.path.join('frames_classified', 'true', f"{i}_{success_count}.jpg"), frame)
+            # cv2.imwrite(os.path.join('frames_classified', 'true', f"{i}_{success_count}.jpg"), frame)
         if key == 8:
             print('Skip')
             continue
