@@ -10,31 +10,32 @@ from pathlib import Path
 import multiprocessing as mp
 
 from multiprocessing import Process
-
+# emboss i szumy wyrzicuc
+# gernerator liczb losowych
 seq = iaa.Sequential([
-    # iaa.Crop(px=(0, 8), keep_size=True),  # Dla obrazka 64px więcej niż 8 to dużo
+    iaa.Crop(px=(0, 8), keep_size=True),  # Dla obrazka 64px więcej niż 8 to dużo
     # iaa.Fliplr(0.5),
     iaa.GaussianBlur(sigma=(0, 0.3)),  # Większy blur polepszy uogólnianie?
     iaa.Sharpen(alpha=(0, 0.3), lightness=(0.8, 1.2)),
 
-    iaa.SimplexNoiseAlpha(iaa.OneOf([
-        iaa.EdgeDetect(alpha=(0.0, .2)),
-        iaa.DirectedEdgeDetect(alpha=(0.0, .3), direction=(0.0, 0.3)),
-    ])),
+    # iaa.SimplexNoiseAlpha(iaa.OneOf([
+    #     iaa.EdgeDetect(alpha=(0.0, .2)),
+    #     iaa.DirectedEdgeDetect(alpha=(0.0, .3), direction=(0.0, 0.3)),
+    # ])),
 
-    iaa.Emboss(alpha=(0, .2), strength=(0, 0.3)),  # Taka maska wyciagajaca fakturę
-    iaa.Dropout((0.01, 0.1), per_channel=0.3),  # Robi czarne kropki
+    # iaa.Emboss(alpha=(0, .2), strength=(0, 0.3)),  # Taka maska wyciagajaca fakturę
+    # iaa.Dropout((0.01, 0.1), per_channel=0.3),  # Robi czarne kropki
     # iaa.CoarseDropout((0.03, 0.15), size_percent=(0.01, 0.03), per_channel=0.2), #Robi czarny kwadrat
-    iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.03 * 255), per_channel=0.5),
+    # iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.03 * 255), per_channel=0.5),
     # iaa.PiecewiseAffine(scale=(0.01, 0.05)),  # Lekkie zniekształcenia
     # iaa.PerspectiveTransform(scale=(0.01, 0.1)),
 
     iaa.Add((-20, 20), per_channel=0.5),  # Brightness
-    iaa.FrequencyNoiseAlpha(
-        exponent=(-1, 0),
-        first=iaa.Multiply((0.7, 1.3), per_channel=True),
-        second=iaa.LinearContrast((0.8, 1.3))
-    ),
+    # iaa.FrequencyNoiseAlpha(
+    #     exponent=(-1, 0),
+    #     first=iaa.Multiply((0.7, 1.3), per_channel=True),
+    #     second=iaa.LinearContrast((0.8, 1.3))
+    # ),
 ])
 
 

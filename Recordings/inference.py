@@ -46,26 +46,39 @@ for i, video_name in enumerate(video_list_files):
             y = x.numpy().astype(int)
             # print(y)
             if y[0] > blocking_lines[i]:
-                # print('pomijam lampe')
+                print('pomijam lampe')
                 continue
             found += 1
             frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), (255, 0, 0), 2)
-        # frame = cv2.line(frame, (0, blocking_lines[i]), (640, blocking_lines[i]), (255, 0, 0), 1)
-        # print(result[0].boxes)
+        frame = cv2.line(frame, (0, blocking_lines[i]), (640, blocking_lines[i]), (255, 0, 0), 1)
+        print(result[0].boxes)
         is_car = found > 0
         data.append([success_count, is_car])
 
 
 
         pbar.update(1)
-        # cv2.imshow('Frame', frame)
+        cv2.imshow('Frame', frame)
+        key = cv2.waitKey(0)
+        if key == 32:
+            print('False')
+            # cv2.imwrite(os.path.join('frames_classified', 'false', f"{i}_{success_count}.jpg"), frame)
+        if key == 13:
+            print('True')
+            # cv2.imwrite(os.path.join('frames_classified', 'true', f"{i}_{success_count}.jpg"), frame)
+        if key == 8:
+            print('Skip')
+            continue
+        if key == ord('q'):
+            print('success_count: ', success_count)
+            break
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break
 
-    f = open(f"data_inference/data_{i}.csv", 'w', newline='', encoding='utf-8')
-    writer = csv.writer(f)
-    writer.writerows(data)
-    f.close()
+    # f = open(f"data_inference/data_{i}.csv", 'w', newline='', encoding='utf-8')
+    # writer = csv.writer(f)
+    # writer.writerows(data)
+    # f.close()
 
     # print(succ, fail)
     cap.release()
