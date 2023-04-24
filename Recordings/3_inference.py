@@ -12,8 +12,8 @@ print(video_list_files)
 model_yolo8n = os.path.join('..', 'yolov8', 'n50_50_100.onnx')
 model = YOLO(model_yolo8n)
 blocking_lines = [300, 310, 320]
+data = []
 for i, video_name in enumerate(video_list_files):
-    data = []
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
     frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -32,7 +32,6 @@ for i, video_name in enumerate(video_list_files):
             continue
         success_count += 1
         if success_count == frames_count:
-            # if success_count == 2:
             break
         if success_count < 3000:
             continue
@@ -40,11 +39,12 @@ for i, video_name in enumerate(video_list_files):
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)
         frame = cv2.resize(frame, (640, 640))
-        result = model.predict(source=frame)
+        result = model.predict(source=frame, classes=[0])
         found = 0
+        print(result[0].boxes, result[0].boxes.xyxy)
         for x in result[0].boxes.xyxy:
+
             y = x.numpy().astype(int)
-            # print(y)
             if y[0] > blocking_lines[i]:
                 print('pomijam lampe')
                 continue
@@ -53,33 +53,24 @@ for i, video_name in enumerate(video_list_files):
         frame = cv2.line(frame, (0, blocking_lines[i]), (640, blocking_lines[i]), (255, 0, 0), 1)
         print(result[0].boxes)
         is_car = found > 0
-        data.append([success_count, is_car])
-
-
+        data.append([f"{i}_{success_count}", is_car])
 
         pbar.update(1)
-        cv2.imshow('Frame', frame)
-        key = cv2.waitKey(0)
-        if key == 32:
-            print('False')
-            # cv2.imwrite(os.path.join('frames_classified', 'false', f"{i}_{success_count}.jpg"), frame)
-        if key == 13:
-            print('True')
-            # cv2.imwrite(os.path.join('frames_classified', 'true', f"{i}_{success_count}.jpg"), frame)
-        if key == 8:
-            print('Skip')
-            continue
-        if key == ord('q'):
-            print('success_count: ', success_count)
-            break
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        # cv2.imshow('Frame', frame)
+        # key = cv2.waitKey(0)
+        # if key == 13:
+        #     pass
+        # if key == ord('q'):
+        #     print('success_count: ', success_count)
         #     break
 
-    # f = open(f"data_inference/data_{i}.csv", 'w', newline='', encoding='utf-8')
-    # writer = csv.writer(f)
-    # writer.writerows(data)
-    # f.close()
+
 
     # print(succ, fail)
     cap.release()
     cv2.destroyAllWindows()
+
+f = open(f"inference.csv", 'w', newline='', encoding='utf-8')
+writer = csv.writer(f)
+writer.writerows(data)
+f.close()
