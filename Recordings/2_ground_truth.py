@@ -2,7 +2,7 @@ import cv2
 from tqdm import tqdm
 import os
 
-i = 2
+i = 0
 previous = False
 video_list_files = os.listdir('videos')
 video_name = video_list_files[i]
@@ -50,9 +50,11 @@ while cap.isOpened():
     if key == 32:
         print('False')
         cv2.imwrite(os.path.join('ground_truth', 'false', f"{i}_{success_count}.jpg"), frame)
+        previous = False
     if key == 13:
         print('True')
         cv2.imwrite(os.path.join('ground_truth', 'true', f"{i}_{success_count}.jpg"), frame)
+        previous = True
     if key == 8:
         print('Skip')
         continue
