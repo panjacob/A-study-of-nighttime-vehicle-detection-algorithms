@@ -9,11 +9,13 @@ from ultralytics import YOLO
 video_list_files = os.listdir('videos')
 print(video_list_files)
 
-model_yolo8n = os.path.join('..', 'yolov8', 'n50_50_100.onnx')
+model_yolo8n = os.path.join('..', 'yolov8', 'n_50_50_100.pt')
 model = YOLO(model_yolo8n)
-blocking_lines = [300, 310, 320]
+blocking_lines = [280, 150]
 data = []
 for i, video_name in enumerate(video_list_files):
+    # if i < 2:
+    #     continue
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
     frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -24,7 +26,7 @@ for i, video_name in enumerate(video_list_files):
     if not cap.isOpened():
         print("Error opening video stream or file")
 
-    pbar = tqdm(total=frames_count)
+    pbar = tqdm(total=frames_count / 25)
     success_count = 0
     while cap.isOpened():
         ret, frame = cap.read()
@@ -33,7 +35,9 @@ for i, video_name in enumerate(video_list_files):
         success_count += 1
         if success_count == frames_count:
             break
-        if success_count < 3000:
+        # if success_count < 3000:
+        #     continue
+        if success_count % 25 != 0:
             continue
 
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -44,27 +48,34 @@ for i, video_name in enumerate(video_list_files):
         print(result[0].boxes, result[0].boxes.xyxy)
         for x in result[0].boxes.xyxy:
 
-            y = x.numpy().astype(int)
-            if y[0] > blocking_lines[i]:
-                print('pomijam lampe')
-                continue
-            found += 1
-            frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), (255, 0, 0), 2)
-        frame = cv2.line(frame, (0, blocking_lines[i]), (640, blocking_lines[i]), (255, 0, 0), 1)
-        print(result[0].boxes)
+            y = x.cpu().numpy().astype(int)
+            if i >= 2:
+                frame = cv2.line(frame, (0, blocking_lines[0]), (640, blocking_lines[0]), (255, 0, 0), 1)
+                frame = cv2.line(frame, (blocking_lines[1], 0), (blocking_lines[1], 640), (255, 0, 0), 1)
+                if y[1] < blocking_lines[0]:
+                    color = (0, 0, 255)
+                elif y[0] < blocking_lines[1]:
+                    color = (0, 255, 255)
+                else:
+                    color = (0, 255, 0)
+                    found += 1
+            else:
+                color = (0, 255, 0)
+                found += 1
+            frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), color, 2)
+
+        # print(result[0].boxes)
         is_car = found > 0
         data.append([f"{i}_{success_count}", is_car])
 
         pbar.update(1)
-        # cv2.imshow('Frame', frame)
-        # key = cv2.waitKey(0)
+        cv2.imshow('Frame', frame)
+        key = cv2.waitKey(1)
         # if key == 13:
         #     pass
         # if key == ord('q'):
         #     print('success_count: ', success_count)
         #     break
-
-
 
     # print(succ, fail)
     cap.release()
