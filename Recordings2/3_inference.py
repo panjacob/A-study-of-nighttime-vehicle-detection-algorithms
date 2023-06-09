@@ -14,8 +14,8 @@ model = YOLO(model_yolo8n)
 blocking_lines = [280, 150]
 data = []
 for i, video_name in enumerate(video_list_files):
-    # if i < 2:
-    #     continue
+    if i < 2:
+        continue
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
     frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
