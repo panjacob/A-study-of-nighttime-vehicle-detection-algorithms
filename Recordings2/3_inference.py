@@ -9,13 +9,11 @@ from ultralytics import YOLO
 video_list_files = os.listdir('videos')
 print(video_list_files)
 
-model_yolo8n = os.path.join('..', 'yolov8', 'n_50_50_100.pt')
+model_yolo8n = os.path.join('..', 'yolov8', 'yolov8s_best.pt')
 model = YOLO(model_yolo8n)
 blocking_lines = [280, 150]
 data = []
 for i, video_name in enumerate(video_list_files):
-    if i < 2:
-        continue
     video_path = os.path.join('videos', video_name)
     cap = cv2.VideoCapture(video_path)
     frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -26,7 +24,7 @@ for i, video_name in enumerate(video_list_files):
     if not cap.isOpened():
         print("Error opening video stream or file")
 
-    pbar = tqdm(total=frames_count / 25)
+    pbar = tqdm(total=frames_count)
     success_count = 0
     while cap.isOpened():
         ret, frame = cap.read()
@@ -37,8 +35,8 @@ for i, video_name in enumerate(video_list_files):
             break
         # if success_count < 3000:
         #     continue
-        if success_count % 25 != 0:
-            continue
+        # if success_count % 25 != 0:
+        #     continue
 
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)
@@ -69,8 +67,8 @@ for i, video_name in enumerate(video_list_files):
         data.append([f"{i}_{success_count}", is_car])
 
         pbar.update(1)
-        cv2.imshow('Frame', frame)
-        key = cv2.waitKey(1)
+        # cv2.imshow('Frame', frame)
+        # key = cv2.waitKey(1)
         # if key == 13:
         #     pass
         # if key == ord('q'):

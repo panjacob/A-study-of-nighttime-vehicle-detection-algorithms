@@ -3,10 +3,13 @@ from tqdm import tqdm
 import os
 
 from pathlib import Path
-Path("ground_truth/true").mkdir(parents=True, exist_ok=True)
-Path("ground_truth/false").mkdir(parents=True, exist_ok=True)
 
-i = 3
+true_path = "ground_truth_sensor/true"
+false_path = "ground_truth_sensor/false"
+Path(true_path).mkdir(parents=True, exist_ok=True)
+Path(false_path).mkdir(parents=True, exist_ok=True)
+
+i = 2
 previous = False
 video_list_files = os.listdir('videos')
 video_name = video_list_files[i]
@@ -47,20 +50,20 @@ while cap.isOpened():
 
     if success_count % 25:
         if previous:
-            cv2.imwrite(os.path.join('ground_truth', 'true', f"{i}_{success_count}.jpg"), frame)
+            cv2.imwrite(os.path.join(true_path, f"{i}_{success_count}.jpg"), frame)
         else:
-            cv2.imwrite(os.path.join('ground_truth', 'false', f"{i}_{success_count}.jpg"), frame)
+            cv2.imwrite(os.path.join(false_path, f"{i}_{success_count}.jpg"), frame)
 
         continue
 
     key = cv2.waitKey(0)
     if key == 32:
         print('False')
-        cv2.imwrite(os.path.join('ground_truth', 'false', f"{i}_{success_count}.jpg"), frame)
+        cv2.imwrite(os.path.join(false_path, f"{i}_{success_count}.jpg"), frame)
         previous = False
     if key == 13:
         print('True')
-        cv2.imwrite(os.path.join('ground_truth', 'true', f"{i}_{success_count}.jpg"), frame)
+        cv2.imwrite(os.path.join(true_path, f"{i}_{success_count}.jpg"), frame)
         previous = True
     if key == 8:
         print('Skip')

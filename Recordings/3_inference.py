@@ -70,7 +70,7 @@ for i, video_name in enumerate(video_list_files):
     cap.release()
     cv2.destroyAllWindows()
 
-f = open(f"inference.csv", 'w', newline='', encoding='utf-8')
+f = open(f"inference_classification.csv", 'w', newline='', encoding='utf-8')
 writer = csv.writer(f)
 writer.writerows(data)
 f.close()
