@@ -1,0 +1,22 @@
+Epoch 1/10
+2023-07-23 17:54:04.829672: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8101
+2023-07-23 17:54:06.834656: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+5173/5173 [==============================] - 823s 158ms/step - loss: 0.1332 - accuracy: 0.9538 - precision: 0.9606 - recall: 0.9508 - val_loss: 0.8187 - val_accuracy: 0.8582 - val_precision: 0.9978 - val_recall: 0.7325
+Epoch 2/10
+5173/5173 [==============================] - 773s 149ms/step - loss: 0.0947 - accuracy: 0.9684 - precision: 0.9755 - recall: 0.9638 - val_loss: 0.5915 - val_accuracy: 0.8507 - val_precision: 0.8828 - val_recall: 0.8262
+Epoch 3/10
+5173/5173 [==============================] - 760s 147ms/step - loss: 0.0770 - accuracy: 0.9743 - precision: 0.9808 - recall: 0.9699 - val_loss: 0.1895 - val_accuracy: 0.9503 - val_precision: 0.9604 - val_recall: 0.9447
+Epoch 4/10
+5173/5173 [==============================] - 790s 153ms/step - loss: 0.0648 - accuracy: 0.9790 - precision: 0.9855 - recall: 0.9743 - val_loss: 0.1587 - val_accuracy: 0.9625 - val_precision: 0.9934 - val_recall: 0.9349
+Epoch 5/10
+5173/5173 [==============================] - 784s 151ms/step - loss: 0.0561 - accuracy: 0.9822 - precision: 0.9882 - recall: 0.9776 - val_loss: 0.1368 - val_accuracy: 0.9644 - val_precision: 0.9706 - val_recall: 0.9616
+Epoch 6/10
+5173/5173 [==============================] - 783s 151ms/step - loss: 0.0498 - accuracy: 0.9843 - precision: 0.9897 - recall: 0.9802 - val_loss: 0.0718 - val_accuracy: 0.9787 - val_precision: 0.9746 - val_recall: 0.9852
+Epoch 7/10
+5173/5173 [==============================] - 790s 153ms/step - loss: 0.0446 - accuracy: 0.9859 - precision: 0.9906 - recall: 0.9824 - val_loss: 0.0778 - val_accuracy: 0.9771 - val_precision: 0.9693 - val_recall: 0.9879
+Epoch 8/10
+5173/5173 [==============================] - 779s 151ms/step - loss: 0.0399 - accuracy: 0.9876 - precision: 0.9918 - recall: 0.9844 - val_loss: 0.0787 - val_accuracy: 0.9791 - val_precision: 0.9923 - val_recall: 0.9679
+Epoch 9/10
+5173/5173 [==============================] - 771s 149ms/step - loss: 0.0365 - accuracy: 0.9893 - precision: 0.9935 - recall: 0.9860 - val_loss: 0.0690 - val_accuracy: 0.9804 - val_precision: 0.9854 - val_recall: 0.9774
+Epoch 10/10
+5173/5173 [==============================] - 779s 151ms/step - loss: 0.0323 - accuracy: 0.9899 - precision: 0.9936 - recall: 0.9870 - val_loss: 0.0838 - val_accuracy: 0.9787 - val_precision: 0.9885 - val_recall: 0.9708
