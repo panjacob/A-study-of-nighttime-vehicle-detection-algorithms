@@ -1,4 +1,5 @@
 import csv
+from pprint import pprint
 
 import cv2
 from tqdm import tqdm
@@ -6,80 +7,127 @@ import os
 
 from ultralytics import YOLO
 
-video_list_files = os.listdir('videos')
-print(video_list_files)
+green = (0, 255, 0)
 
-model_yolo8n = os.path.join('..', 'yolov8', 'yolov8s_best.pt')
+training_path = os.path.join('dataset', 'test')
+training_files_true = [os.path.join(training_path, 'true', x) for x in os.listdir(os.path.join(training_path, 'true'))]
+training_files_false = [os.path.join(training_path, 'false', x) for x in
+                        os.listdir(os.path.join(training_path, 'false'))]
+
+true_files = [[x, True] for x in training_files_true]
+false_files = [[x, False] for x in training_files_false]
+
+dataset = true_files + false_files
+
+
+def get_keys(x):
+    a, b = x[0].split('\\')[3].split('.')[0].split('_')
+    # print(int(a), int(b))
+
+    # return ((int(a) + 1) * 100_000) + int(b)
+    return int(a), int(b)
+
+
+dataset = sorted(dataset, key=lambda key: get_keys(key))
+
+model_yolo8n = os.path.join('..', 'yolov8', 'yolov8s_extended.pt')
+# 'yolov8s_extended.pt'
 model = YOLO(model_yolo8n)
-blocking_lines = [280, 150]
-data = []
-for i, video_name in enumerate(video_list_files):
-    video_path = os.path.join('videos', video_name)
-    cap = cv2.VideoCapture(video_path)
-    frames_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    video_time = frames_count / fps
-    frames_light_time = []
 
-    if not cap.isOpened():
-        print("Error opening video stream or file")
+TP = TN = FP = FN = 0
+TP1 = TN1 = FP1 = FN1 = 0
+TP2 = TN2 = FP2 = FN2 = 0
+pbar = tqdm(total=len(dataset))
+dataset_len = len(dataset)
+for i, (img_path, etiquette) in enumerate(dataset):
+    video_id = int(img_path.split('\\')[3].split('_')[0])
 
-    pbar = tqdm(total=frames_count)
-    success_count = 0
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            continue
-        success_count += 1
-        if success_count == frames_count:
-            break
-        # if success_count < 3000:
-        #     continue
-        # if success_count % 25 != 0:
-        #     continue
+    prediction = False
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)
-        frame = cv2.resize(frame, (640, 640))
-        result = model.predict(source=frame, classes=[0])
-        found = 0
-        print(result[0].boxes, result[0].boxes.xyxy)
-        for x in result[0].boxes.xyxy:
+    frame = cv2.imread(img_path)
+    frame = cv2.resize(frame, (640, 640))
+    # result = model.predict(source=frame)
+    # result = model.track(frame, persist=True)
+    result = model.track(frame, persist=True, tracker="bytetrack.yaml")
 
-            y = x.cpu().numpy().astype(int)
-            if i >= 2:
-                frame = cv2.line(frame, (0, blocking_lines[0]), (640, blocking_lines[0]), (255, 0, 0), 1)
-                frame = cv2.line(frame, (blocking_lines[1], 0), (blocking_lines[1], 640), (255, 0, 0), 1)
-                if y[1] < blocking_lines[0]:
-                    color = (0, 0, 255)
-                elif y[0] < blocking_lines[1]:
-                    color = (0, 255, 255)
-                else:
-                    color = (0, 255, 0)
-                    found += 1
-            else:
-                color = (0, 255, 0)
-                found += 1
-            frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), color, 2)
-
-        # print(result[0].boxes)
-        is_car = found > 0
-        data.append([f"{i}_{success_count}", is_car])
-
-        pbar.update(1)
+    for x in result[0].boxes.xyxy:
+        prediction = True
+        y = x.cpu().numpy().astype(int)
+        frame = cv2.rectangle(frame, (y[0], y[1]), (y[2], y[3]), green, 2)
         # cv2.imshow('Frame', frame)
-        # key = cv2.waitKey(1)
-        # if key == 13:
-        #     pass
-        # if key == ord('q'):
-        #     print('success_count: ', success_count)
-        #     break
+        # key = cv2.waitKey(0)
+        # print(img_path)
 
-    # print(succ, fail)
-    cap.release()
-    cv2.destroyAllWindows()
+    if prediction and etiquette:
+        TP += 1
+    elif prediction and not etiquette:
+        FP += 1
+    elif not prediction and etiquette:
+        FN += 1
+    else:
+        TN += 1
 
-f = open(f"inference.csv", 'w', newline='', encoding='utf-8')
-writer = csv.writer(f)
-writer.writerows(data)
-f.close()
+    if video_id < 2:
+        if prediction and etiquette:
+            TP1 += 1
+        elif prediction and not etiquette:
+            FP1 += 1
+        elif not prediction and etiquette:
+            FN1 += 1
+        else:
+            TN1 += 1
+
+    if video_id >= 2:
+        if prediction and etiquette:
+            TP2 += 1
+        elif prediction and not etiquette:
+            FP2 += 1
+        elif not prediction and etiquette:
+            FN2 += 1
+        else:
+            TN2 += 1
+
+    pbar.update(1)
+print(TP, TN, FP, FN)
+accuracy = (TP + TN) / (TP + FN + TN + FP)
+recall = TP / (TP + FN)
+precision = TP / (TP + FP)
+print(accuracy, recall, precision)
+
+print(TP1, TN1, FP1, FN1)
+accuracy1 = (TP1 + TN1) / (TP1 + FN1 + TN1 + FP1)
+recall1 = TP1 / (TP1 + FN1)
+precision1 = TP1 / (TP1 + FP1)
+print(accuracy1, recall1, precision1)
+
+print(TP2, TN2, FP2, FN2)
+accuracy2 = (TP2 + TN2) / (TP2 + FN2 + TN2 + FP2)
+recall2 = TP2 / (TP2 + FN2)
+precision2 = TP2 / (TP2 + FP2)
+print(accuracy2, recall2, precision2)
+
+# yolon
+# 0.91 0.92 0.91 all
+# 0.89 0.98 0.90 city
+# 0.93 0.70 0.95 wieś
+# botsort
+# 0.94 0.80 0.92 wieś
+# 0.84 0.99 0.84 city
+# 0.89 0.96 0.85
+# bytesort
+# 0.89 0.96 0.85
+# 0.84 0.99 0.84 city
+# 0.94 0.80 0.92 wieś
+
+# yolov8s
+# 0.90 0.91 0.91
+# 0.92 0.70 0.91
+# 0.89 0.97 0.91
+# botsort
+# 0.91 0.95 0.88
+# 0.93 0.79 0.89
+# 0.88 0.99 0.88
+# bytesort
+# 0.91 0.95 0.88
+# 0.93 0.79 0.89
+# 0.88 0.99 0.88
