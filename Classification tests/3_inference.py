@@ -30,7 +30,7 @@ def get_keys(x):
 
 dataset = sorted(dataset, key=lambda key: get_keys(key))
 
-model_yolo8n = os.path.join('..', 'yolov8', 'yolov8s_extended.pt')
+model_yolo8n = os.path.join('..', 'YOLOV8 training', 'yolov8s_extended.pt')
 # 'yolov8s_extended.pt'
 model = YOLO(model_yolo8n)
 

@@ -9,7 +9,7 @@ from ultralytics import YOLO
 video_list_files = os.listdir('videos')
 print(video_list_files)
 
-model_yolo8n = os.path.join('..', 'yolov8', 'yolov8s_best.pt')
+model_yolo8n = os.path.join('..', 'YOLOV8 training', 'yolov8s_best.pt')
 model = YOLO(model_yolo8n)
 blocking_lines = [280, 150]
 data = []
