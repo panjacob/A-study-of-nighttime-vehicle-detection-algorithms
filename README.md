@@ -2,7 +2,8 @@
   
 This is my master thesis. Whole code is messy but right now but it could be useful for somebody.
 
-Link to dataset: https://doi.org/10.34808/e8ht-d443
+Link to dataset: https://doi.org/10.34808/e8ht-d443 https://mostwiedzy.pl/pl/open-research-data/a-study-of-nighttime-vehicle-detection-algorithms,10070936421042877-0
+
 Link to thesis: download.panjacob.pl/Badanie_algorytm%c3%b3w_wykrywania_pojazd%c3%b3w_w_porze_nocnej.pdf
 
 ### The study used 4 methods to identify vehicles:
@@ -40,4 +41,4 @@ The work did not take into account the braking distance of the vehicle. With bre
 ![Pasted image 20231023144710](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/4a961a58-7c8b-40b3-a08e-ba920f26c901)
 ![Pasted image 20231023144721](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/85139774-140f-41e9-8300-1414de5778a0)
 ![Pasted image 20231023144748](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/311601f5-e682-4345-bfb1-7c7eb684a8cf)
-https://mostwiedzy.pl/pl/open-research-data/a-study-of-nighttime-vehicle-detection-algorithms,10070936421042877-0
+
