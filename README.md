@@ -29,7 +29,7 @@ Nvidia Jetson Nano, Raspberry Pi 4 (both 4GB) and Google Coral USB Accelerator.
 ![Pasted image 20231023144232](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/c78417c2-de15-4e81-b1ae-144ac713fa3a)
 ![Pasted image 20231023144259](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/a7513758-12d5-4886-b40d-7864fbd2bb11)
 
-### Optimalisation
+### Optimalization
 ![Pasted image 20231023144334](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/4707c164-808b-4a4e-bfba-dab4c2a95bb2)
 ![Pasted image 20231023144400](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/de424b46-f50d-4d49-bb38-126f24e68880)
 ![Pasted image 20231023144420](https://github.com/panjacob/A-study-of-nighttime-vehicle-detection-algorithms/assets/44145413/85aad9c7-d218-4631-b88f-61707a2a2d1b)
