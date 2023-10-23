@@ -4,7 +4,7 @@ This is my master thesis. Whole code is messy but right now but it could be usef
 
 Link to dataset: https://doi.org/10.34808/e8ht-d443 https://mostwiedzy.pl/pl/open-research-data/a-study-of-nighttime-vehicle-detection-algorithms,10070936421042877-0
 
-Link to thesis: download.panjacob.pl/Badanie_algorytm%c3%b3w_wykrywania_pojazd%c3%b3w_w_porze_nocnej.pdf
+Link to thesis: http://download.panjacob.pl/Badanie_algorytm%c3%b3w_wykrywania_pojazd%c3%b3w_w_porze_nocnej.pdf
 
 ### The study used 4 methods to identify vehicles:
 - Detection on image  
